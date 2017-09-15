@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Szczegóły twita{% endblock %}
+{% block content %}
+    <h2>Twit:</h2>
+    <table>
+        <tr>
+            <td>{{twit.content_twit}}</td>
+            <td>{{twit.comment_set.all}}</td>
+        </tr>
+    </table>
+    <br>
+    <form action="{% url 'details_twit' twit.id %}" method = 'post'>
+        {{form}}
+        <input type='submit' value="Wyślij">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+

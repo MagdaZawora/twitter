@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Twoje twity{% endblock %}
+{% block content %}
+    <h2>Wszystkie twity użytkownika {{user.first_name}} {{user.last_name}}:</h2>
+    <table>
+        {% for twit in twits %}
+        <tr>
+            <td>Twit: {{twit.content_twit}}</td>
+            <td>Ilość komentarzy: {{twit.comment_set.count}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="{% url 'new_message' user.id %}" method = 'post'>
+        <input type="submit" value='Wyślij wiadomość'/>
+        {% csrf_token %}
+    </form>
+{% endblock %}
+

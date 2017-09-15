@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Twoje wiadomości{% endblock %}
+{% block content %}
+    <h2>Wszystkie wiadomości użytkownika {{user.first_name}} {{user.last_name}}:</h2>
+    <h3>Odebrane</h3>
+    <table>
+        {% for message in messages_received %}
+        <tr>
+            <td><a href="{% url 'details_message' message.id %}">{{message.content}}</a></td>
+            <td>{{message.sender}}</td>
+            <td>{{message.creation_date}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <h3>Wysłane</h3>
+    <table>
+        {% for message in messages_sent %}
+        <tr>
+            <td><a href="{% 'details_message' message.id %}">{{message.content}}</a></td>
+            <td>{{message.receiver}}</td>
+            <td>{{message.creation_date}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+{% endblock %}
