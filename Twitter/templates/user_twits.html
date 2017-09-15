@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Twoje twity{% endblock %}
 {% block content %}
-    <h2>Wszystkie twity użytkownika {{user.first_name}} {{user.last_name}}:</h2>
+    <h2>Wszystkie twity użytkownika {{user.username}}:</h2>
     <table>
         {% for twit in twits %}
         <tr>

@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from Twitter.views import AllTwitsView, AddTwitView, UserTwitsView, TwitView, LogoutView, \
+from Twitter.views import AllTwitsView, UserTwitsView, TwitView, LogoutView, \
     ResetPasswordView, MessageView, NewMessageView, UserMessagesView, AddUserCreate, LoginView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^all_twits/', AllTwitsView.as_view(), name='all_twits'),
-    url(r'^add_twit/(?P<id>\d+)/$', AddTwitView.as_view(), name='add_twit'),
+    url(r'^all_twits/(?P<id>\d+)/$', AllTwitsView.as_view(), name='all_twits'),
+    # url(r'^add_twit/(?P<id>\d+)/$', AddTwitView.as_view(), name='add_twit'),
     url(r'^user_twits/(?P<id>\d+)/$', UserTwitsView.as_view(), name='user_twits'),
     url(r'^details_twit/(?P<id>\d+)/$', TwitView.as_view(), name='details_twit'),
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'} ,name='login'),

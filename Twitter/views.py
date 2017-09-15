@@ -17,21 +17,15 @@ from django.core.urlresolvers import reverse_lazy
 
 class AllTwitsView(View):
 
-    def get(self, request):
-        twits = Twit.objects.all().order_by('-creation_date')
-        ctx = {'twits': twits}
-        return TemplateResponse(request, 'all_twits.html', ctx)
-
-
-class AddTwitView(View):
-
     def get(self, request, id):
+        twits = Twit.objects.all().order_by('-creation_date')
         user = User.objects.get(id=id)
         form = AddTwitForm()
-        ctx = {'form': form}
-        return TemplateResponse(request, 'add_twit.html', ctx)
+        ctx = {'twits': twits, 'form': form}
+        return TemplateResponse(request, 'all_twits.html', ctx)
 
     def post(self, request, id):
+        twits = Twit.objects.all().order_by('-creation_date')
         user = User.objects.get(id=id)
         form = AddTwitForm(request.POST)
         if form.is_valid():
@@ -39,17 +33,28 @@ class AddTwitView(View):
             content_twit = form.cleaned_data['content_twit']
             twit = Twit(author_twit=user, content_twit=content_twit)
             twit.save()
-            return HttpResponseRedirect('/all_twits/')
+            return HttpResponseRedirect('/all_twits/' + str(user.id))
         else:
             ctx = {'form': form}
-            return TemplateResponse(request, 'add_twit.html', ctx)
+            return TemplateResponse(request, 'all_twits.html', ctx)
+
+"""
+class AddTwitView(View):
+
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+
+        ctx = {'form': form}
+        return TemplateResponse(request, 'add_twit.html', ctx)
+
+"""
 
 
 class UserTwitsView(View):
 
     def get(self, request, id):
         user = User.objects.get(id=int(id))
-        twits = Twit.objects.filter(author_twit=user)
+        twits = Twit.objects.filter(author_twit=user).order_by('-creation_date')
         ctx = {'user': user, 'twits': twits}
         return TemplateResponse(request, 'user_twits.html', ctx)
 
@@ -58,20 +63,22 @@ class TwitView(View):
 
     def get(self, request, id):
         twit = Twit.objects.get(id=id)
+        comments = Comment.objects.filter(relating_to=twit).order_by('-creation_date')
         form = AddCommentForm()
-        ctx = {'twit': twit, 'form': form}
+        ctx = {'twit': twit, 'form': form, 'comments': comments}
         return TemplateResponse(request, 'details_twit.html', ctx)
 
     def post(self, request, id):
         form = AddCommentForm(request.POST)
         twit = Twit.objects.get(id=id)
+        comments = Comment.objects.filter(relating_to=twit).order_by('-creation_date')
         if form.is_valid():
             author_comment = request.user
             content_comment = form.cleaned_data['content_comment']
             relating_to = twit
             comment = Comment(author_comment=author_comment, content_comment=content_comment, relating_to = relating_to)
             comment.save()
-            ctx = {'form': form, 'twit': twit}
+            ctx = {'form': form, 'twit': twit, 'comments': comments}
             return HttpResponseRedirect('/details_twit/' + str(twit.id), ctx)
         else:
             ctx = {'form': form}

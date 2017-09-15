@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Szczegóły twita{% endblock %}
 {% block content %}
-    <h2>Twit:</h2>
-    <table>
-        <tr>
-            <td>{{twit.content_twit}}</td>
-            <td>{{twit.comment_set.all}}</td>
-        </tr>
-    </table>
+    <h3>Twit: {{twit.content_twit}} opublikowany przez użytkownika {{user.username}}</h3>
+        {% for comment in comments %}
+            {{comment.content_comment}} {{comment.author_comment}} {{comment.creation_date}}</br>
+        {% endfor %}
     <br>
     <form action="{% url 'details_twit' twit.id %}" method = 'post'>
         {{form}}
