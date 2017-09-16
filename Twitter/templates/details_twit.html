@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Szczegóły twita{% endblock %}
 {% block content %}
-    <h3>Twit: {{twit.content_twit}} opublikowany przez użytkownika {{user.username}}</h3>
+    <h3>Twit: {{twit.content_twit}}</h3>
+    <h4>autor: {{user.username}}</h4>
+    <h3>Komentarze:</h3>
         {% for comment in comments %}
             {{comment.content_comment}} {{comment.author_comment}} {{comment.creation_date}}</br>
         {% endfor %}

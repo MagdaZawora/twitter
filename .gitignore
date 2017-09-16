@@ -101,10 +101,10 @@ ENV/
 .mypy_cache/
 
 # ignore .idea
-.idea
+.idea/
 
 # ignore secret_settings
 myTwitter/myTwitter/secret_settings.py
 
 # ignore virtualenv
-myTwitter/ve_myTwitter
+myTwitter/ve_myTwitter/

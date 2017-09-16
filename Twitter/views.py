@@ -180,8 +180,8 @@ class UserMessagesView(View):
 
     def get(self, request, id):
         user = User.objects.get(id=id)
-        messages_sent = Message.objects.filter(sender=user)
-        messages_received = Message.objects.filter(receiver=user)
+        messages_sent = Message.objects.filter(sender=user).order_by('-creation_date')
+        messages_received = Message.objects.filter(receiver=user).order_by('-creation_date')
         ctx = {'user': user, 'messages_sent': messages_sent, 'messages_received': messages_received}
         return TemplateResponse(request, 'user_messages.html', ctx)
 

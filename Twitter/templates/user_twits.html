@@ -5,7 +5,7 @@
     <table>
         {% for twit in twits %}
         <tr>
-            <td>Twit: {{twit.content_twit}}</td>
+            <td>Twit:<a href="{% url 'details_twit' twit.id %}">{{twit.content_twit}}</a></td>
             <td>Ilość komentarzy: {{twit.comment_set.count}}</td>
         </tr>
         {% endfor %}

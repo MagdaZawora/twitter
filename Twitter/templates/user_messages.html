@@ -1,25 +1,39 @@
 {% extends 'base.html' %}
 {% block title %}Twoje wiadomości{% endblock %}
 {% block content %}
-    <h2>Wszystkie wiadomości użytkownika {{user.first_name}} {{user.last_name}}:</h2>
+    <h2>Wszystkie wiadomości użytkownika {{user.username}}:</h2>
     <h3>Odebrane</h3>
     <table>
+        <tr>
+            <td>Treść wiadomości</td>
+            <td>Nadawca</td>
+            <td>Data wysłania</td>
+            <td>Status</td>
+        </tr>
         {% for message in messages_received %}
         <tr>
-            <td><a href="{% url 'details_message' message.id %}">{{message.content}}</a></td>
-            <td>{{message.sender}}</td>
+            <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
+            <td><a href="{% url 'user_twits' message.sender.id %}">{{message.sender}}</a></td>
             <td>{{message.creation_date}}</td>
+            <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
         </tr>
         {% endfor %}
     </table>
     <br>
     <h3>Wysłane</h3>
     <table>
+        <tr>
+            <td>Treść wiadomości</td>
+            <td>Odbiorca</td>
+            <td>Data wysłania</td>
+            <td>Status</td>
+        </tr>
         {% for message in messages_sent %}
         <tr>
-            <td><a href="{% 'details_message' message.id %}">{{message.content}}</a></td>
-            <td>{{message.receiver}}</td>
+            <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
+            <td><a href="{% url 'user_twits' message.receiver.id %}">{{message.receiver}}</a></td>
             <td>{{message.creation_date}}</td>
+            <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
         </tr>
         {% endfor %}
     </table>
