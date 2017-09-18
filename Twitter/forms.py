@@ -4,6 +4,7 @@ from django.core.validators import validate_email, URLValidator, ValidationError
 from django.forms import ModelForm
 from django.forms import widgets
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
 class AddTwitForm(ModelForm):
@@ -25,26 +26,25 @@ class AddCommentForm(ModelForm):
 
 class LoginForm(forms.Form):
 
-    email = forms.EmailField(label='e-mail')
-    password = forms.CharField(widget=forms.PasswordInput, label='password')
+    username = forms.CharField(label='użytkownik')
+    password = forms.CharField(widget=forms.PasswordInput, label='Wprowadź hasło')
+
 
 
     def validate_email(email):
         db_emails = User.objects.filter(email=email)
         for db_email in db_emails:
             if db_email == email:
-                raise ValidationError('%s Jest już taki użytkownik w bazie!' % email)
+                raise ValidationError('%s - jest już taki użytkownik w bazie!' % email)
 
-"""
-class AddUserForm(forms.Form):
 
-    first_name = forms.CharField(label='Imię')
-    last_name = forms.CharField(label='Nazwisko')
-    email = forms.CharField(label='e-mail', validators=[EmailValidator, validate_email])
-    password = forms.CharField(widget=forms.PasswordInput, label='Hasło')
-    password2 = forms.CharField(widget=forms.PasswordInput, label='Potwierdź hasło')
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
 
-"""
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
 
 class ResetPasswordForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label='Wprowadź nowe hasło')

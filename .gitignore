@@ -104,7 +104,8 @@ ENV/
 .idea/
 
 # ignore secret_settings
-myTwitter/myTwitter/secret_settings.py
+secret_settings.py
 
 # ignore virtualenv
-myTwitter/ve_myTwitter/
+ve_myTwitter/
+Twitter/templates/home.html

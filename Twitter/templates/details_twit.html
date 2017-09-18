@@ -3,6 +3,7 @@
 {% block content %}
     <h3>Twit: {{twit.content_twit}}</h3>
     <h4>autor: {{user.username}}</h4>
+    <h5>opublikowany: {{twit.creation_date}}</h5>
     <h3>Komentarze:</h3>
         {% for comment in comments %}
             {{comment.content_comment}} {{comment.author_comment}} {{comment.creation_date}}</br>

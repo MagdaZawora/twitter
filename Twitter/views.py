@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views import View
 from .models import Twit, Comment, Message
 from django.template.response import TemplateResponse
-from .forms import AddTwitForm, AddCommentForm, LoginForm, ResetPasswordForm, NewMessageForm
+from .forms import AddTwitForm, AddCommentForm, LoginForm, ResetPasswordForm, NewMessageForm, UserForm
 from django .http import HttpResponseRedirect
 from django.views.generic.edit import CreateView, DeleteView, FormView
 from django.contrib.auth.models import User
@@ -11,18 +11,21 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, FormView
 from django.core.validators import EmailValidator
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
-class AllTwitsView(View):
+class HomeView(View):
+    # login_url = '/login/'
 
     def get(self, request, id):
         twits = Twit.objects.all().order_by('-creation_date')
         user = User.objects.get(id=id)
         form = AddTwitForm()
         ctx = {'twits': twits, 'form': form}
-        return TemplateResponse(request, 'all_twits.html', ctx)
+        return TemplateResponse(request, 'home.html', ctx)
 
     def post(self, request, id):
         twits = Twit.objects.all().order_by('-creation_date')
@@ -33,10 +36,12 @@ class AllTwitsView(View):
             content_twit = form.cleaned_data['content_twit']
             twit = Twit(author_twit=user, content_twit=content_twit)
             twit.save()
-            return HttpResponseRedirect('/all_twits/' + str(user.id))
+            return HttpResponseRedirect('/home/' + str(user.id))
         else:
             ctx = {'form': form}
-            return TemplateResponse(request, 'all_twits.html', ctx)
+            return TemplateResponse(request, 'home.html', ctx)
+
+
 
 """
 class AddTwitView(View):
@@ -85,36 +90,66 @@ class TwitView(View):
             return TemplateResponse(request, 'details_twit.html', ctx)
 
 
-class LoginView(FormView):
-    form_class = LoginForm
-    success_url = '/all_twits/'
-    template_name = 'login.html'
+class LoginView(View):
 
-    def form_valid(self, form):
-        email = form.cleaned_data['email']
-        password = form.cleaned_data['password']
-        user = authenticate(email=email, password=password)
-        if user is not None:
-            login(self.request, user)
-            return super(LoginView, self).form_valid(form)
+    def get(self, request):
+        form = LoginForm()
+        ctx = {'form': form}
+        return TemplateResponse(request, 'login.html', ctx)
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/home/' + str(user.id))
         else:
-            return self.form_invalid(form)
+            ctx = {'msg': 'Dane się nie zgadazają!'}
+            return TemplateResponse(request, 'login.html', ctx)
+
 
 
 class LogoutView(View):
 
     def get(self, request, id):
         logout(request)
-        ctx = {'msg': 'Jesteś wylogowany'}
+        ctx = {'msg': 'Zostałeś wylogowany'}
         return TemplateResponse(request, 'logout.html', ctx)
 
-
+"""
 class AddUserCreate(CreateView):
     model = User
-    fields = ['username', 'email', 'first_name', 'last_name', 'password']
+    fields = ['username', 'email', 'password']
     template_name = 'user_form.html'
-    success_url = '/login/'
+    success_url = '/all_twits/' + str(user.id))
+"""
 
+class AddUserView(View):
+
+    def get(self, request):
+        form = UserForm()
+        ctx = {'form': form}
+        return TemplateResponse(request, 'user_form.html', ctx)
+
+    def post(self, request):
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect('/home/' + str(user.id))
+        else:
+            ctx = {"form": form, 'msg': 'Dane się nie zgadazają!'}
+            return TemplateResponse(request, 'user_form.html', ctx)
 
 class ResetPasswordView(View):
 
