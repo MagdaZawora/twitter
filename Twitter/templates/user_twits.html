@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Twoje twity{% endblock %}
+{% block title %}Moje twity{% endblock %}
 {% block content %}
     <h2>Wszystkie twity użytkownika {{user.username}}:</h2>
     <table>
@@ -16,4 +16,3 @@
         {% csrf_token %}
     </form>
 {% endblock %}
-
