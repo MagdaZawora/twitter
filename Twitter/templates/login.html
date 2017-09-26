@@ -1,15 +1,42 @@
 {% extends 'base.html' %}
 {% block title %}Zaloguj się{% endblock %}
-{% block content %}
-    <form action="{% url 'login' %}" method = 'post'>
-        {{form}}
-        {% csrf_token %}
-        <input type='submit', value="Wyślij">
-    </form>
-    {{msg}}<br>
-    <a href="{% url 'add_user' %}">Zarejestruj się</a>
+{% block navbar %}
+<div class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'login' %}">Twitter</a>
+        </div>
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'register' %}">
+                    <span class="glyphicon glyphicon-record" aria-hidden="true"></span>&nbsp; Zarejestruj się</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
-
-
-
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h3>Zaloguj się:</h3>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form action="{% url 'login' %}" method='post'>
+                {{form}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-info">Wyślij</button>
+            </form>
+        </div>
+    </div>
+    {{msg}}<br>
+</div>
+{% endblock %}
 

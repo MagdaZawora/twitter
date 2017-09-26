@@ -1,12 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}Zarejestruj się{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Twitter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
 {% block content %}
-    {% if not msg %}
-        <form action="{% url 'register' %}" method = 'post'>
-            {{form}}
-            <input type='submit' value="Wyślij">
-            {% csrf_token %}
-        </form>
-    {% endif %}
-    {{msg}}
+<div class="container-fluid">
+    <div class="page-header">
+        <h3>Zarejestruj się:</h3>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form action="{% url 'register' %}" method='post'>
+                {{form}}
+                <button type="submit" class="btn btn-info">Wyślij</button>
+                {% csrf_token %}
+            </form>
+            {% if msg %}
+            <div class="alert alert-success">{{msg}}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
