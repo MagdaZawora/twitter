@@ -26,8 +26,8 @@ class AddCommentForm(ModelForm):
 
 class LoginForm(forms.Form):
 
-    username = forms.CharField(label='użytkownik')
-    password = forms.CharField(widget=forms.PasswordInput, label='Wprowadź hasło')
+    username = forms.CharField(label='username')
+    password = forms.CharField(widget=forms.PasswordInput, label='hasło')
 
 
 

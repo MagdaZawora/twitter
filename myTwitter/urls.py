@@ -15,22 +15,23 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from Twitter.views import HomeView, UserTwitsView, TwitView, LogoutView, \
-    ResetPasswordView, MessageView, NewMessageView, UserMessagesView, AddUserView, LoginView
-from django.contrib.auth import views as auth_views
+    ResetPasswordView, MessageView, NewMessageView, UserMessagesView, RegisterView, LoginView
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/(?P<id>\d+)/$', HomeView.as_view(), name='home'),
+    url(r'^register/', RegisterView.as_view(), name='register'),
     url(r'^user_twits/(?P<id>\d+)/$', UserTwitsView.as_view(), name='user_twits'),
     url(r'^details_twit/(?P<id>\d+)/$', TwitView.as_view(), name='details_twit'),
-    url(r'^login/$', LoginView.as_view() ,name='login'),
+    url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/(?P<id>\d+)/$', LogoutView.as_view(), name='logout'),
-    url(r'^add_user/$', AddUserView.as_view(), name='add_user'),
     url(r'^reset_password/(?P<id>\d+)/$', ResetPasswordView.as_view(), name='reset_password'),
     url(r'^details_message/(?P<id>\d+)/$', MessageView.as_view(), name='details_message'),
     url(r'^new_message/(?P<id>\d+)/?$', NewMessageView.as_view(), name='new_message'),
     url(r'^user_messages/(?P<id>\d+)/?$', UserMessagesView.as_view(), name='user_messages'),
-
 ]
+

@@ -17,48 +17,36 @@ from django.core.urlresolvers import reverse
 
 # Create your views here.
 
+
 class HomeView(View):
-    # login_url = '/login/'
 
     def get(self, request, id):
-        twits = Twit.objects.all().order_by('-creation_date')
         user = User.objects.get(id=id)
         form = AddTwitForm()
-        ctx = {'twits': twits, 'form': form}
+        twits = Twit.objects.all().order_by('-creation_date')
+        ctx = {'form': form, 'twits': twits}
         return TemplateResponse(request, 'home.html', ctx)
 
     def post(self, request, id):
-        twits = Twit.objects.all().order_by('-creation_date')
         user = User.objects.get(id=id)
         form = AddTwitForm(request.POST)
+        twits = Twit.objects.all().order_by('-creation_date')
         if form.is_valid():
-            author_twit = user
+            author_twit = self.request.user
             content_twit = form.cleaned_data['content_twit']
-            twit = Twit(author_twit=user, content_twit=content_twit)
+            twit = Twit(author_twit=self.request.user, content_twit=content_twit)
             twit.save()
             return HttpResponseRedirect('/home/' + str(user.id))
+            # return TemplateResponse(request, 'home.html')
         else:
-            ctx = {'form': form}
+            ctx = {'form': form, 'twits': twits}
             return TemplateResponse(request, 'home.html', ctx)
-
-
-
-"""
-class AddTwitView(View):
-
-    def get(self, request, id):
-        user = User.objects.get(id=id)
-
-        ctx = {'form': form}
-        return TemplateResponse(request, 'add_twit.html', ctx)
-
-"""
 
 
 class UserTwitsView(View):
 
     def get(self, request, id):
-        user = User.objects.get(id=int(id))
+        user = User.objects.get(id=id)
         twits = Twit.objects.filter(author_twit=user).order_by('-creation_date')
         ctx = {'user': user, 'twits': twits}
         return TemplateResponse(request, 'user_twits.html', ctx)
@@ -78,7 +66,7 @@ class TwitView(View):
         twit = Twit.objects.get(id=id)
         comments = Comment.objects.filter(relating_to=twit).order_by('-creation_date')
         if form.is_valid():
-            author_comment = request.user
+            author_comment = self.request.user
             content_comment = form.cleaned_data['content_comment']
             relating_to = twit
             comment = Comment(author_comment=author_comment, content_comment=content_comment, relating_to = relating_to)
@@ -104,12 +92,15 @@ class LoginView(View):
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                return HttpResponseRedirect('/home/' + str(user.id))
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect('/home/' + str(user.id))
+            else:
+                ctx = {'form': form, 'msg': 'Dane się nie zgadzają!'}
+                return TemplateResponse(request, 'login.html', ctx)
         else:
-            ctx = {'msg': 'Dane się nie zgadazają!'}
+            ctx = {'form': form, 'msg': 'Błąd logowania!'}
             return TemplateResponse(request, 'login.html', ctx)
-
 
 
 class LogoutView(View):
@@ -119,20 +110,14 @@ class LogoutView(View):
         ctx = {'msg': 'Zostałeś wylogowany'}
         return TemplateResponse(request, 'logout.html', ctx)
 
-"""
-class AddUserCreate(CreateView):
-    model = User
-    fields = ['username', 'email', 'password']
-    template_name = 'user_form.html'
-    success_url = '/all_twits/' + str(user.id))
-"""
 
-class AddUserView(View):
+
+class RegisterView(View):
 
     def get(self, request):
         form = UserForm()
         ctx = {'form': form}
-        return TemplateResponse(request, 'user_form.html', ctx)
+        return TemplateResponse(request, 'register.html', ctx)
 
     def post(self, request):
         form = UserForm(request.POST)
@@ -149,7 +134,9 @@ class AddUserView(View):
                     return HttpResponseRedirect('/home/' + str(user.id))
         else:
             ctx = {"form": form, 'msg': 'Dane się nie zgadazają!'}
-            return TemplateResponse(request, 'user_form.html', ctx)
+            return TemplateResponse(request, 'register.html', ctx)
+
+
 
 class ResetPasswordView(View):
 
@@ -169,8 +156,9 @@ class ResetPasswordView(View):
                 ctx={'msg': 'Hasła są różne!'}
                 return TemplateResponse(request, 'reset_password.html', ctx)
             else:
+                user.set_password(form.cleaned_data['password'])
                 user.save()
-                ctx = {'msg': 'Hasło zmienione poprawnie!'}
+                ctx = {'msg': 'Hasło zostało zmienione!'}
                 return TemplateResponse(request, 'reset_password.html', ctx)
 
 
@@ -186,7 +174,7 @@ class NewMessageView(View):
         user = User.objects.get(id=id)
         form = NewMessageForm(request.POST)
         if form.is_valid():
-            sender = request.user
+            sender = self.request.user
             receiver = user
             content = form.cleaned_data['content']
             msg = Message(sender=sender, receiver=receiver, content=content)

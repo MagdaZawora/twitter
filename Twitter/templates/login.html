@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Zaloguj się{% endblock %}
 {% block content %}
-        <form action="{% url 'login' %}" method = 'post'>
-            {{form}}
-            {% csrf_token %}
-            <input type='submit', value="Wyślij">
-        </form>
+    <form action="{% url 'login' %}" method = 'post'>
+        {{form}}
+        {% csrf_token %}
+        <input type='submit', value="Wyślij">
+    </form>
+    {{msg}}<br>
     <a href="{% url 'add_user' %}">Zarejestruj się</a>
 {% endblock %}
 
