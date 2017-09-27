@@ -1,18 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Moje twity{% endblock %}
+{% block nav-user %}<li class="active">{% endblock %}
 {% block content %}
-    <h2>Wszystkie twity użytkownika {{user.username}}:</h2>
-    <table>
+<div class="container-fluid">
+    <div class="page-header">
+        <h2>Wszystkie twity <small>użytkownika</small> {{user.username}}:</h2>
+    </div>
+    <ul class="list-group">
         {% for twit in twits %}
-        <tr>
-            <td>Twit:<a href="{% url 'details_twit' twit.id %}">{{twit.content_twit}}</a></td>
-            <td>Ilość komentarzy: {{twit.comment_set.count}}</td>
-        </tr>
+            <li class="list-group-item">
+                Twit: {{twit.content_twit}}</a>
+                Ilość <a href="{% url 'details_twit' twit.id %}"> komentarzy: <span class="badge">{{twit.comment_set.count}}</span></a></li>
         {% endfor %}
-    </table>
+    </ul>
     <br>
     <form action="{% url 'new_message' user.id %}" method = 'post'>
-        <input type="submit" value='Wyślij wiadomość'/>
+        <button type="submit" class="btn btn-default">Wyślij wiadomość</button>
         {% csrf_token %}
     </form>
+</div>
 {% endblock %}
+

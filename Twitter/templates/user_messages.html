@@ -1,41 +1,58 @@
 {% extends 'base.html' %}
 {% block title %}Moje wiadomości{% endblock %}
+{% block nav-messages %}<li class="active">{% endblock %}
 {% block content %}
-    <h2>Wszystkie wiadomości użytkownika {{user.username}}:</h2>
-    <h3>Odebrane</h3>
-    <table>
-        <tr>
-            <td>Treść wiadomości</td>
-            <td>Nadawca</td>
-            <td>Data wysłania</td>
-            <td>Status</td>
-        </tr>
-        {% for message in messages_received %}
-        <tr>
-            <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
-            <td><a href="{% url 'user_twits' message.sender.id %}">{{message.sender}}</a></td>
-            <td>{{message.creation_date}}</td>
-            <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="container-fluid">
+    <div class="page-header">
+        <h2>Wszystkie wiadomości <small>użytkownika</small> {{user.username}}:</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12" style="background: lightgray;"><h4>Odebrane</h4></div>
+    </div>
     <br>
-    <h3>Wysłane</h3>
-    <table>
-        <tr>
-            <td>Treść wiadomości</td>
-            <td>Odbiorca</td>
-            <td>Data wysłania</td>
-            <td>Status</td>
-        </tr>
-        {% for message in messages_sent %}
-        <tr>
-            <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
-            <td><a href="{% url 'user_twits' message.receiver.id %}">{{message.receiver}}</a></td>
-            <td>{{message.creation_date}}</td>
-            <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <br>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Treść wiadomości</th>
+                <th>Nadawca</th>
+                <th>Data wysłania</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for message in messages_received %}
+            <tr>
+                <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
+                <td><a href="{% url 'user_twits' message.sender.id %}">{{message.sender}}</a></td>
+                <td>{{message.creation_date}}</td>
+                <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="background: lightgray;"><h4>Wysłane</h4></div>
+        </div>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Treść wiadomości</th>
+                <th>Odbiorca</th>
+                <th>Data wysłania</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for message in messages_sent %}
+            <tr>
+                <td><a href="{% url 'details_message' message.id %}">{{message.content|truncatechars:30}}</a></td>
+                <td><a href="{% url 'user_twits' message.receiver.id %}">{{message.receiver}}</a></td>
+                <td>{{message.creation_date}}</td>
+                <td>{{message.is_read|yesno:"Odebrana,Nieodebrana"}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
 {% endblock %}

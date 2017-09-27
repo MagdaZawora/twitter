@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}Szczegóły wiadomości{% endblock %}
 {% block content %}
+<div class="container-fluid">
     <h2>Wiadomość:</h2>
-    <table>
-        <tr>
-            <td>Treść wiadomości</td>
-            <td>Nadawca</td>
-            <td>Odbiorca</td>
-            <td>Data nadania</td>
-        </tr>
-        <tr>
-            <td>{{message.content}}</td>
-            <td>{{message.sender}}</td>
-            <td>{{message.receiver}}</td>
-            <td>{{message.creation_date}}</td>
-        </tr>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Treść wiadomości</th>
+                <th>Nadawca</th>
+                <th>Odbiorca</th>
+                <th>Data nadania</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{message.content}}</td>
+                <td>{{message.sender}}</td>
+                <td>{{message.receiver}}</td>
+                <td>{{message.creation_date}}</td>
+            </tr>
+        </tbody>
     </table>
     {% if message.receiver == user %}
         <h5><a href="{% url 'new_message' message.sender.id %}">Odpisz</a></h5>
     {% endif %}
+</div>
 {% endblock %}
+

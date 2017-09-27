@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}Nowa wiadomość{% endblock %}
 {% block content %}
-    {% if not msg %}
-    <form action="{% url 'new_message' user.id %}" method = 'post'>
-        {{form}}
-        <input type='submit' value="Wyślij">
-        {% csrf_token %}
-    </form>
-    {% endif %}
-    {{msg}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            {% if not msg %}
+            <form action="{% url 'new_message' user.id %}" method='post'>
+                {{form}}
+                <button class="btn btn-info" data-toggle="modal" data-target="#popUpWindow">Wyślij</button>
+                {% csrf_token %}
+            </form>
+            {% endif %}
+            {% if msg %}
+            <div class="alert alert-success">{{msg}}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
