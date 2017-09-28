@@ -18,7 +18,8 @@ from django.core.urlresolvers import reverse
 # Create your views here.
 
 
-class HomeView(View):
+class HomeView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         user = User.objects.get(id=id)
@@ -37,13 +38,13 @@ class HomeView(View):
             twit = Twit(author_twit=self.request.user, content_twit=content_twit)
             twit.save()
             return HttpResponseRedirect('/home/' + str(user.id))
-            # return TemplateResponse(request, 'home.html')
         else:
             ctx = {'form': form, 'twits': twits}
             return TemplateResponse(request, 'home.html', ctx)
 
 
-class UserTwitsView(View):
+class UserTwitsView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         user = User.objects.get(id=id)
@@ -52,7 +53,8 @@ class UserTwitsView(View):
         return TemplateResponse(request, 'user_twits.html', ctx)
 
 
-class TwitView(View):
+class TwitView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         twit = Twit.objects.get(id=id)
@@ -103,7 +105,8 @@ class LoginView(View):
             return TemplateResponse(request, 'login.html', ctx)
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         logout(request)
@@ -138,7 +141,8 @@ class RegisterView(View):
 
 
 
-class ResetPasswordView(View):
+class ResetPasswordView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         user = User.objects.get(id=id)
@@ -162,7 +166,8 @@ class ResetPasswordView(View):
                 return TemplateResponse(request, 'reset_password.html', ctx)
 
 
-class NewMessageView(View):
+class NewMessageView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         user = User.objects.get(id=id)
@@ -186,8 +191,8 @@ class NewMessageView(View):
             return TemplateResponse(request, 'new_message.html', ctx)
 
 
-
-class MessageView(View):
+class MessageView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         message = Message.objects.get(id=id)
@@ -199,7 +204,8 @@ class MessageView(View):
 
 
 
-class UserMessagesView(View):
+class UserMessagesView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
     def get(self, request, id):
         user = User.objects.get(id=id)

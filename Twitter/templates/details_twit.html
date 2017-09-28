@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="page-header">
         <h3><small>Twit:</small> {{twit.content_twit}}</h3>
-        <h3><small>autor:<a href="{% url 'user_twits' twit.author_twit.id %}">{{twit.author_twit.username}}</a>,
+        <h3><small>autor: <a href="{% url 'user_twits' twit.author_twit.id %}">{{twit.author_twit.username}}</a>,
         opublikowany {{twit.creation_date}}</small></h3>
     </div>
     <form action="{% url 'details_twit' twit.id %}" method = 'post'>

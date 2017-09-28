@@ -14,10 +14,12 @@
         {% endfor %}
     </ul>
     <br>
+    {% if receiver == self.request.user %}
     <form action="{% url 'new_message' user.id %}" method = 'post'>
         <button type="submit" class="btn btn-default">Wyślij wiadomość</button>
         {% csrf_token %}
     </form>
+    {% endif %}
 </div>
 {% endblock %}
 
