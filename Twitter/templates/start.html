@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Start{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'login' %}">Twitter</a>
+        </div>
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'register' %}">
+                    <span class="glyphicon glyphicon-record" aria-hidden="true"></span>&nbsp; Zarejestruj się</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h3><a href="{% url 'login' %}"> Twitnij sobie!</a></h3>
+    </div>
+</div>
+{% endblock %}

@@ -17,6 +17,14 @@ from django.core.urlresolvers import reverse
 
 # Create your views here.
 
+class StartView(View):
+
+    def get(self, request):
+        # if request.user.is_authenticated:
+            # user = User.objects.get(id=id)
+            # return HttpResponseRedirect('/home/' + str(user.id))
+        return TemplateResponse(request, 'start.html')
+
 
 class HomeView(LoginRequiredMixin, View):
     login_url = '/login/'

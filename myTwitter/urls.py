@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from Twitter.views import HomeView, UserTwitsView, TwitView, LogoutView, \
-    ResetPasswordView, MessageView, NewMessageView, UserMessagesView, RegisterView, LoginView
+    ResetPasswordView, MessageView, NewMessageView, UserMessagesView, RegisterView, LoginView, StartView
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', StartView.as_view(), name='start'),
     url(r'^home/(?P<id>\d+)/$', HomeView.as_view(), name='home'),
     url(r'^register/', RegisterView.as_view(), name='register'),
     url(r'^user_twits/(?P<id>\d+)/$', UserTwitsView.as_view(), name='user_twits'),

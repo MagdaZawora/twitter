@@ -1,25 +1,30 @@
 {% extends 'base.html' %}
 {% block title %}Moje twity{% endblock %}
-{% block nav-user %}<li class="active">{% endblock %}
-{% block content %}
-<div class="container-fluid">
-    <div class="page-header">
-        <h2>Wszystkie twity <small>użytkownika</small> {{user.username}}:</h2>
-    </div>
-    <ul class="list-group">
-        {% for twit in twits %}
+{% block nav-user %}
+<li class="active">{% endblock %}
+    {% block content %}
+    <div class="container-fluid">
+        <div class="page-header">
+            <h2>Wszystkie twity
+                <small>użytkownika</small>
+                {{user.username}}:
+            </h2>
+        </div>
+        <ul class="list-group">
+            {% for twit in twits %}
             <li class="list-group-item">
                 Twit: {{twit.content_twit}}</a>
-                Ilość <a href="{% url 'details_twit' twit.id %}"> komentarzy: <span class="badge">{{twit.comment_set.count}}</span></a></li>
-        {% endfor %}
-    </ul>
-    <br>
-    {% if receiver == self.request.user %}
-    <form action="{% url 'new_message' user.id %}" method = 'post'>
-        <button type="submit" class="btn btn-default">Wyślij wiadomość</button>
-        {% csrf_token %}
-    </form>
-    {% endif %}
-</div>
-{% endblock %}
-
+                Ilość <a href="{% url 'details_twit' twit.id %}"> komentarzy: <span class="badge">{{twit.comment_set.count}}</span></a>
+            </li>
+            {% endfor %}
+        </ul>
+        <br>
+        {% if user != message.receiver %}
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h5><a class="btn btn-default btn-sm" href="{% url 'new_message' user.id %}">Wyślij wiadomość</a></h5>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endblock %}
