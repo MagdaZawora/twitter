@@ -20,9 +20,8 @@ from django.core.urlresolvers import reverse
 class StartView(View):
 
     def get(self, request):
-        # if request.user.is_authenticated:
-            # user = User.objects.get(id=id)
-            # return HttpResponseRedirect('/home/' + str(user.id))
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/home/' + str(request.user.id))
         return TemplateResponse(request, 'start.html')
 
 
