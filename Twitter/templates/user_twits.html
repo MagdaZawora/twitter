@@ -19,7 +19,7 @@
             {% endfor %}
         </ul>
         <br>
-        {% if user != message.receiver %}
+        {% if sender != receiver %}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <h5><a class="btn btn-default btn-sm" href="{% url 'new_message' user.id %}">Wyślij wiadomość</a></h5>

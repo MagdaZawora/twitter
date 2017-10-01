@@ -57,7 +57,9 @@ class UserTwitsView(LoginRequiredMixin, View):
     def get(self, request, id):
         user = User.objects.get(id=id)
         twits = Twit.objects.filter(author_twit=user).order_by('-creation_date')
-        ctx = {'user': user, 'twits': twits}
+        sender = self.request.user
+        receiver = user
+        ctx = {'user': user, 'twits': twits, 'sender': sender, 'receiver':receiver}
         return TemplateResponse(request, 'user_twits.html', ctx)
 
 
