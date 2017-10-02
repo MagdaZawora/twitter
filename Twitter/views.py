@@ -12,10 +12,16 @@ from django.views.generic import TemplateView, FormView
 from django.core.validators import EmailValidator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse_lazy
-from django.core.urlresolvers import reverse
+from django.shortcuts import get_list_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import TwitSerializer, CommentSerializer, MessageSerializer
+from django.http import Http404
+
 
 # Create your views here.
+
 
 class StartView(View):
 
@@ -25,6 +31,7 @@ class StartView(View):
         return TemplateResponse(request, 'start.html')
 
 
+"""
 class HomeView(LoginRequiredMixin, View):
     login_url = '/login/'
 
@@ -48,6 +55,18 @@ class HomeView(LoginRequiredMixin, View):
         else:
             ctx = {'form': form, 'twits': twits}
             return TemplateResponse(request, 'home.html', ctx)
+        
+"""
+class HomeView(APIView):
+
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        twits = Twit.objects.all().order_by('-creation_date')
+        serializer = TwitSerializer(twits, many=True)
+        return Response(serializer.data)
+
+    def post(selfself, request, id):
+        pass
 
 
 class UserTwitsView(LoginRequiredMixin, View):

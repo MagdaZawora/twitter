@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from Twitter.views import HomeView, UserTwitsView, TwitView, LogoutView, \
     ResetPasswordView, MessageView, NewMessageView, UserMessagesView, RegisterView, LoginView, StartView
-
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -36,3 +36,4 @@ urlpatterns = [
     url(r'^user_messages/(?P<id>\d+)/?$', UserMessagesView.as_view(), name='user_messages'),
 ]
 
+urlpatterns = format_suffix_patterns(urlpatterns)
