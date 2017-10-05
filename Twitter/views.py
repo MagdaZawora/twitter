@@ -59,14 +59,41 @@ class HomeView(LoginRequiredMixin, View):
 """
 class HomeView(APIView):
 
-    def get(self, request, id):
+    def get_object(self, id):
+        try:
+            return Twit.objects.get(id=id)
+        except Twit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
         user = User.objects.get(id=id)
         twits = Twit.objects.all().order_by('-creation_date')
         serializer = TwitSerializer(twits, many=True)
         return Response(serializer.data)
 
-    def post(selfself, request, id):
-        pass
+    def post(self, request, id, format=None):
+        user = User.objects.get(id=id)
+        form = AddTwitForm(request.POST)
+        twits = Twit.objects.all().order_by('-creation_date')
+        serializer = TwitSerializer(twits, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id, format=None):
+        twit = self.get_object(id=id)
+        serializer = TwitSerializer(twit, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        twit = self.get_object(id=id)
+        twit.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class UserTwitsView(LoginRequiredMixin, View):
