@@ -31,7 +31,6 @@ class StartView(View):
         return TemplateResponse(request, 'start.html')
 
 
-"""
 class HomeView(LoginRequiredMixin, View):
     login_url = '/login/'
 
@@ -56,7 +55,7 @@ class HomeView(LoginRequiredMixin, View):
             ctx = {'form': form, 'twits': twits}
             return TemplateResponse(request, 'home.html', ctx)
         
-"""
+
 class HomeView(APIView):
 
     def get_object(self, id):
@@ -108,6 +107,21 @@ class UserTwitsView(LoginRequiredMixin, View):
         return TemplateResponse(request, 'user_twits.html', ctx)
 
 
+class UserTwitsView(APIView):
+
+    def get_object(self, id):
+        try:
+            return User.objects.get(id=id)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        user = User.objects.get(id=id)
+        twits = Twit.objects.filter(author_twit=user).order_by('-creation_date')
+        serializer = TwitSerializer(twits, many=True)
+        return Response(serializer.data)
+
+
 class TwitView(LoginRequiredMixin, View):
     login_url = '/login/'
 
@@ -133,6 +147,44 @@ class TwitView(LoginRequiredMixin, View):
         else:
             ctx = {'form': form}
             return TemplateResponse(request, 'details_twit.html', ctx)
+
+
+class TwitView(APIView):
+    def get_object(self, id):
+        try:
+            return Twit.objects.get(id=id)
+        except Twit.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        twit = Twit.objects.get(id=id)
+        comments = Comment.objects.filter(relating_to=twit).order_by('-creation_date')
+        form = AddCommentForm()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, id, format=None):
+        form = AddCommentForm(request.POST)
+        twit = Twit.objects.get(id=id)
+        comments = Comment.objects.filter(relating_to=twit).order_by('-creation_date')
+        serializer = CommentSerializer(comments, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id, format=None):
+        twit = self.get_object(id=id)
+        serializer = TwitSerializer(twit, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        twit = self.get_object(id=id)
+        twit.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LoginView(View):
@@ -246,6 +298,28 @@ class NewMessageView(LoginRequiredMixin, View):
             return TemplateResponse(request, 'new_message.html', ctx)
 
 
+class NewMessageView(APIView):
+
+    def get_object(self, id):
+        try:
+            return User.objects.get(id=id)
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, id, format=None):
+        message = self.get_object(id=id)
+        serializer = MessageSerializer(message, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        message = self.get_object(id=id)
+        message.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class MessageView(LoginRequiredMixin, View):
     login_url = '/login/'
 
@@ -258,6 +332,18 @@ class MessageView(LoginRequiredMixin, View):
         return TemplateResponse(request, 'details_message.html', ctx)
 
 
+class MessageView(APIView):
+    def get_object(self, id):
+        try:
+            return Message.objects.get(id=id)
+        except Message.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        message = Message.objects.get(id=id)
+        serializer = MessageSerializer(message)
+        return Response(serializer.data)
+
 
 class UserMessagesView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -268,7 +354,4 @@ class UserMessagesView(LoginRequiredMixin, View):
         messages_received = Message.objects.filter(receiver=user).order_by('-creation_date')
         ctx = {'user': user, 'messages_sent': messages_sent, 'messages_received': messages_received}
         return TemplateResponse(request, 'user_messages.html', ctx)
-
-
-
 
