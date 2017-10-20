@@ -108,5 +108,4 @@ secret_settings.py
 
 # ignore virtualenv
 ve_myTwitter/
-Twitter/templates/home.html
 Twitter/static/

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Strona główna{% endblock %}
+{% block nav-twit %}<li class="active">{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2>Napisz twita:</h2>
+    </div>
+    <form action="{% url 'home' user.id %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-default">Wyślij</button>
+    </form>
+    <h3>Wszystkie twity:</h3>
+    <ul class="list-group">
+        {% for twit in twits %}
+        <li class="list-group-item">
+            {{twit.content_twit}}
+            <a href="{% url 'user_twits' twit.author_twit.id %}">{{twit.author_twit}}</a>
+            opublikowany: {{twit.creation_date}}
+            <a href="{% url 'details_twit' twit.id %}">skomentowano <span class="badge">{{twit.comment_set.count}}</span></a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
