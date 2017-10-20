@@ -13,7 +13,7 @@
         <ul class="list-group">
             {% for twit in twits %}
             <li class="list-group-item">
-                Twit: {{twit.content_twit}}</a>
+                Twit: {{twit.content_twit}}
                 Ilość <a href="{% url 'details_twit' twit.id %}"> komentarzy: <span class="badge">{{twit.comment_set.count}}</span></a>
             </li>
             {% endfor %}
