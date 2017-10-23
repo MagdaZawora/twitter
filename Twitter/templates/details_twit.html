@@ -3,21 +3,30 @@
 {% block content %}
 <div class="container-fluid">
     <div class="page-header">
-        <h3><small>Twit:</small> {{twit.content_twit}}</h3>
-        <h3><small>autor: <a href="{% url 'user_twits' twit.author_twit.id %}">{{twit.author_twit.username}}</a>,
-        opublikowany {{twit.creation_date}}</small></h3>
+        <h3>
+            <small>Twit:</small>
+            {{twit.content_twit}}
+        </h3>
+        <h3>
+            <small>autor: <a href="{% url 'user_twits' twit.author_twit.id %}">{{twit.author_twit.username}}</a>,
+                opublikowany {{twit.creation_date}}
+            </small>
+        </h3>
     </div>
-    <form action="{% url 'details_twit' twit.id %}" method = 'post'>
+    <form action="{% url 'details_twit' twit.id %}" method='post'>
         {{form}}
-        <input type='submit' value="Wyślij">
+        <button type="submit" class="btn btn-default">Wyślij</button>
         {% csrf_token %}
     </form>
     <h3>Komentarze:</h3>
-        <ul class="list-group">
-            {% for comment in comments %}
-            <li class="list-group-item">{{comment.content_comment}} <a href="{% url 'user_twits' comment.author_comment.id %}">{{comment.author_comment}}</a> {{comment.creation_date}}</li>
-            {% endfor %}
-        </ul>
+    <ul class="list-group">
+        {% for comment in comments %}
+        <li class="list-group-item">{{comment.content_comment}} <a
+                href="{% url 'user_twits' comment.author_comment.id %}">{{comment.author_comment}}</a>
+            {{comment.creation_date}}
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
 

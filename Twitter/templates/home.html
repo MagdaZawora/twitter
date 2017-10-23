@@ -6,10 +6,18 @@
     <div class="page-header">
         <h2>Napisz twita:</h2>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Piszesz na własną odpowiedzialność!
+        </div>
+        <div class="panel-body">
+            Wiem, znikaj z tym komunikatem:)
+        </div>
+    </div>
     <form action="{% url 'home' user.id %}" method="post">
         {% csrf_token %}
         {{ form }}
-        <button type="submit" class="btn btn-default">Wyślij</button>
+        <button type="submit" id="test" class="btn btn-default">Wyślij</button>
     </form>
     <h3>Wszystkie twity:</h3>
     <ul class="list-group">
