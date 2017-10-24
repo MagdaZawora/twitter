@@ -1,0 +1,11 @@
+body {
+    background: white url("images/background.png");
+}
+.page-header {
+    display: none;
+    color: #001f3f;
+    font-family: "Roboto", Georgia, Serif;
+}
+.navbar-brand {
+    font-family: "Pacifico", Georgia, Serif;
+}
