@@ -53,7 +53,7 @@ class HomeView(LoginRequiredMixin, View):
             ctx = {'form': form, 'twits': twits}
             return TemplateResponse(request, 'home.html', ctx)
         
-"""
+
 class HomeView(APIView):
 
     def get_object(self, id):
@@ -90,7 +90,7 @@ class HomeView(APIView):
         twit = self.get_object(id=id)
         twit.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-"""
+
 
 
 class UserTwitsView(LoginRequiredMixin, View):
@@ -104,7 +104,7 @@ class UserTwitsView(LoginRequiredMixin, View):
         ctx = {'user': user, 'twits': twits, 'sender': sender, 'receiver':receiver}
         return TemplateResponse(request, 'user_twits.html', ctx)
 
-"""
+
 class UserTwitsView(APIView):
 
     def get_object(self, id):
@@ -118,7 +118,7 @@ class UserTwitsView(APIView):
         twits = Twit.objects.filter(author_twit=user).order_by('-creation_date')
         serializer = TwitSerializer(twits, many=True)
         return Response(serializer.data)
-"""
+
 
 class TwitView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -146,7 +146,7 @@ class TwitView(LoginRequiredMixin, View):
             ctx = {'form': form}
             return TemplateResponse(request, 'details_twit.html', ctx)
 
-"""
+
 class TwitView(APIView):
     def get_object(self, id):
         try:
@@ -183,7 +183,7 @@ class TwitView(APIView):
         twit = self.get_object(id=id)
         twit.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-"""
+
 
 class LoginView(View):
 
@@ -295,7 +295,7 @@ class NewMessageView(LoginRequiredMixin, View):
             ctx = {'form': form, 'user': user}
             return TemplateResponse(request, 'new_message.html', ctx)
 
-"""
+
 class NewMessageView(APIView):
 
     def get_object(self, id):
@@ -316,7 +316,7 @@ class NewMessageView(APIView):
         message = self.get_object(id=id)
         message.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-"""
+
 
 class MessageView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -329,7 +329,7 @@ class MessageView(LoginRequiredMixin, View):
         ctx = {'message': message}
         return TemplateResponse(request, 'details_message.html', ctx)
 
-"""
+
 class MessageView(APIView):
     def get_object(self, id):
         try:
@@ -341,7 +341,7 @@ class MessageView(APIView):
         message = Message.objects.get(id=id)
         serializer = MessageSerializer(message)
         return Response(serializer.data)
-"""
+
 
 class UserMessagesView(LoginRequiredMixin, View):
     login_url = '/login/'
